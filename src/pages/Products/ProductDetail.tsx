@@ -6,7 +6,7 @@ import { getProductById, createProduct, updateProduct } from '@/api/products'
 import { getBrands } from '@/api/brands'
 import QiniuUpload from '@/components/QiniuUpload'
 import MultiQiniuUpload from '@/components/MultiQiniuUpload'
-import type { Product, ProductSku, Brand, TasteScore, AromaNote, FlavorConclusion, ProductLayer, ProductAromaTag, ProductReview } from '@/types'
+import type { ProductSku, Brand, TasteScore, AromaNote, FlavorConclusion, ProductLayer, ProductAromaTag, ProductReview } from '@/types'
 
 const { TextArea } = Input
 
@@ -53,7 +53,19 @@ export default function ProductDetail() {
       const product = res.data.data
       if (product) {
         form.setFieldsValue(product)
-        setSkus(product.skus || [])
+        // 详情接口返回的是 H5 结构(size/sizeDetail/people)，需归一化为 SKU 表格使用的字段名
+        const normalizedSkus: ProductSku[] = (product.skus || []).map((s: any, i: number) => ({
+          id: s.id,
+          product_id: s.product_id ?? product.id,
+          size_label: s.size_label ?? s.size ?? '',
+          size_detail: s.size_detail ?? s.sizeDetail ?? '',
+          people_range: s.people_range ?? s.people ?? '',
+          price: s.price ?? 0,
+          status: s.status ?? '在架',
+          sort_order: s.sort_order ?? i,
+          created_at: s.created_at ?? new Date().toISOString(),
+        }))
+        setSkus(normalizedSkus)
         setImageUrls(product.image_urls || [])
         // 设置关联表数据
         setTasteScores(product.taste_scores || null)
@@ -70,11 +82,13 @@ export default function ProductDetail() {
     }
   }
 
-  const onFinish = async (values: Partial<Product>) => {
+  const onFinish = async () => {
     try {
       setSaving(true)
+      // Tabs 仅挂载当前面板，values 会丢失未访问 tab 的字段（如状态配置），
+      // 用 getFieldsValue(true) 取完整存储值，避免保存时把其他 tab 字段重置为默认值
       const data = {
-        ...values,
+        ...form.getFieldsValue(true),
         skus,
         image_urls: imageUrls,
         taste_scores: tasteScores,
@@ -108,7 +122,7 @@ export default function ProductDetail() {
       size_detail: '',
       people_range: '',
       price: 0,
-      status: '在售',
+      status: '在架',
       sort_order: skus.length,
       created_at: new Date().toISOString(),
     }])
@@ -309,7 +323,7 @@ export default function ProductDetail() {
           onChange={(val) => updateSku(index, 'status', val)}
           size="small"
           options={[
-            { value: '在售', label: '在售' },
+            { value: '在架', label: '在架' },
             { value: '下架', label: '下架' },
             { value: '缺货', label: '缺货' },
           ]}
@@ -432,7 +446,7 @@ export default function ProductDetail() {
             </Form.Item>
 
             <Form.Item name="heat_score" label="热度分">
-              <InputNumber min={0} max={100} className="w-full" />
+              <InputNumber min={0} className="w-full" placeholder="不限上限" />
             </Form.Item>
 
             <Form.Item name="popularity_tag" label="人气标签">

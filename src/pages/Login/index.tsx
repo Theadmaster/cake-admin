@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation, Navigate } from 'react-router-dom'
 import { Form, Input, Button, Card, message } from 'antd'
 import { UserOutlined, LockOutlined } from '@ant-design/icons'
 import { useAuthStore } from '@/stores/auth'
@@ -12,7 +12,14 @@ interface LoginForm {
 export default function Login() {
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
-  const { login } = useAuthStore()
+  const location = useLocation()
+  const { login, isAuthenticated } = useAuthStore()
+  const from = (location.state as { from?: string } | null)?.from || '/'
+
+  // 已登录则不允许再停留在登录页
+  if (isAuthenticated) {
+    return <Navigate to={from} replace />
+  }
 
   const onFinish = async (values: LoginForm) => {
     setLoading(true)
@@ -33,7 +40,7 @@ export default function Login() {
           role: user.user_type,
         })
         message.success('登录成功')
-        navigate('/')
+        navigate(from, { replace: true })
       } else {
         message.error(json.message || '用户名或密码错误')
       }

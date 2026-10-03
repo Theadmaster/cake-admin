@@ -1,5 +1,5 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom'
-import AppLayout from '@/components/Layout'
+import RequireAuth from '@/components/RequireAuth'
 import Dashboard from '@/pages/Dashboard'
 import BrandList from '@/pages/Brands/BrandList'
 import BrandDetail from '@/pages/Brands/BrandDetail'
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <AppLayout />,
+    element: <RequireAuth />,
     children: [
       {
         index: true,

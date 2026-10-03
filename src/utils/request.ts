@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { message } from 'antd'
 import type { ApiResponse } from '@/types'
+import { useAuthStore } from '@/stores/auth'
 
 const request = axios.create({
   baseURL: '/api',
@@ -13,7 +14,7 @@ const request = axios.create({
 // 请求拦截器
 request.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token')
+    const token = useAuthStore.getState().token
     if (token) {
       config.headers.Authorization = `Bearer ${token}`
     }
@@ -43,7 +44,8 @@ request.interceptors.response.use(
       switch (status) {
         case 401:
           message.error('未授权，请重新登录')
-          localStorage.removeItem('token')
+          // 重置登录态，确保路由守卫不再放行
+          useAuthStore.getState().logout()
           window.location.href = '/login'
           break
         case 403:
