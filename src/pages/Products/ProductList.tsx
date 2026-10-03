@@ -24,6 +24,8 @@ export default function ProductList() {
       const params = new URLSearchParams({
         page: String(page),
         pageSize: String(pagination.pageSize),
+        // 按最近编辑时间倒序展示，最新编辑的商品在最前
+        sort: 'updated',
       })
       if (keyword) params.set('keyword', keyword)
       if (selectedBrand) params.set('brand_id', selectedBrand)
