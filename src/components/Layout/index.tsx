@@ -12,6 +12,7 @@ import {
   BookOutlined,
   SettingOutlined,
   LogoutOutlined,
+  UnorderedListOutlined,
 } from '@ant-design/icons'
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/auth'
@@ -34,6 +35,11 @@ const menuItems: MenuProps['items'] = [
     key: '/products',
     icon: <GiftOutlined />,
     label: '商品管理',
+  },
+  {
+    key: '/tasks',
+    icon: <UnorderedListOutlined />,
+    label: '任务中心',
   },
   {
     key: '/stores',

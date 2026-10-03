@@ -228,3 +228,33 @@ export interface ApiResponse<T = unknown> {
   data?: T
   message?: string
 }
+
+/* 异步任务（任务中心） */
+export interface TaskError {
+  row: number
+  field: string
+  message: string
+  raw: string
+}
+
+export interface ImportTask {
+  id: string
+  type: 'import' | 'export'
+  name: string | null
+  file_name: string | null
+  status: '排队中' | '处理中' | '成功' | '部分成功' | '失败'
+  total_rows: number
+  processed_rows: number
+  success_rows: number
+  fail_rows: number
+  new_products: number
+  new_skus: number
+  message: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface ImportTaskDetail extends ImportTask {
+  file_key: string | null
+  errors: TaskError[]
+}

@@ -16,6 +16,7 @@ import OperatorDetail from '@/pages/Operators/OperatorDetail'
 import WikiList from '@/pages/Wiki/WikiList'
 import WikiDetail from '@/pages/Wiki/WikiDetail'
 import TagList from '@/pages/Tags/TagList'
+import Tasks from '@/pages/Tasks'
 import Settings from '@/pages/Settings'
 import Login from '@/pages/Login'
 
@@ -95,6 +96,10 @@ const router = createBrowserRouter([
       {
         path: 'tags',
         element: <TagList />,
+      },
+      {
+        path: 'tasks',
+        element: <Tasks />,
       },
       {
         path: 'settings',

@@ -35,3 +35,13 @@ export const updateProduct = (id: string, data: Partial<Product>) => {
 export const deleteProduct = (id: string) => {
   return request.delete<ApiResponse<void>>(`/products/${id}`)
 }
+
+// 创建商品批量导入任务（Excel 已上传七牛云后调用）
+export const createImportTask = (data: { fileKey: string; fileName?: string }) => {
+  return request.post<ApiResponse<{ taskId: string; status: string }>>('/products/import', data)
+}
+
+// 下载导入模板（返回 xlsx 二进制流）
+export const downloadImportTemplate = async () => {
+  return request.get('/products/import/template', { responseType: 'blob' })
+}

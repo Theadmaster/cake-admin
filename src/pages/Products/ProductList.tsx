@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Table, Button, Input, Tag, Space, Modal, Select, message } from 'antd'
-import { PlusOutlined, SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons'
+import { PlusOutlined, SearchOutlined, EditOutlined, DeleteOutlined, UploadOutlined } from '@ant-design/icons'
 import { getProducts, deleteProduct } from '@/api/products'
 import { getBrands } from '@/api/brands'
+import ImportProductsModal from '@/components/ImportProductsModal'
 import type { Product, Brand } from '@/types'
 
 export default function ProductList() {
@@ -15,6 +16,7 @@ export default function ProductList() {
   const [selectedBrand, setSelectedBrand] = useState<string | undefined>()
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>()
   const [pagination, setPagination] = useState({ page: 1, pageSize: 20, total: 0 })
+  const [importOpen, setImportOpen] = useState(false)
 
   const fetchProducts = async (page = 1) => {
     try {
@@ -196,14 +198,31 @@ export default function ProductList() {
     <div>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold">商品管理</h2>
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => navigate('/products/new')}
-        >
-          新增商品
-        </Button>
+        <Space>
+          <Button
+            icon={<UploadOutlined />}
+            onClick={() => setImportOpen(true)}
+          >
+            批量导入
+          </Button>
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => navigate('/products/new')}
+          >
+            新增商品
+          </Button>
+        </Space>
       </div>
+
+      <ImportProductsModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onSuccess={() => {
+          setImportOpen(false)
+          navigate('/tasks')
+        }}
+      />
 
       <div className="flex gap-4 mb-4">
         <Input
