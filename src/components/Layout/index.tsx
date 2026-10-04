@@ -13,6 +13,7 @@ import {
   SettingOutlined,
   LogoutOutlined,
   UnorderedListOutlined,
+  CustomerServiceOutlined,
 } from '@ant-design/icons'
 import { useAppStore } from '@/stores/app'
 import { useAuthStore } from '@/stores/auth'
@@ -40,6 +41,11 @@ const menuItems: MenuProps['items'] = [
     key: '/tasks',
     icon: <UnorderedListOutlined />,
     label: '任务中心',
+  },
+  {
+    key: '/tickets',
+    icon: <CustomerServiceOutlined />,
+    label: '工单管理',
   },
   {
     key: '/stores',

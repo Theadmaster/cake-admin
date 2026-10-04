@@ -212,6 +212,60 @@ export interface Tag {
   created_at: string
 }
 
+/* 工单管理 */
+export type TicketType = 'bug' | '优化'
+export type TicketPriority = '低' | '中' | '高' | '紧急'
+export type TicketStatus = '待处理' | '审阅中' | 'AI处理中' | '待审阅' | '已完成' | '已驳回' | '处理失败'
+
+export interface TicketAiStep {
+  name: string
+  status: '成功' | '失败' | '跳过'
+  detail: string
+  durationMs: number
+}
+
+export interface TicketAiResult {
+  steps: TicketAiStep[]
+  commit: string | null
+  branch: string | null
+  deployUrl: string | null
+  simulate: boolean
+}
+
+export interface TicketEvent {
+  id: string
+  ticket_id: string
+  step: string
+  title: string
+  detail: string | null
+  operator: string
+  created_at: string
+}
+
+export interface Ticket {
+  id: string
+  ticket_no: number
+  title: string
+  type: TicketType
+  page_path: string | null
+  description: string
+  tech_notes: string | null
+  priority: TicketPriority
+  status: TicketStatus
+  created_by: string | null
+  reviewed_by: string | null
+  ai_summary: string | null
+  failure_reason: string | null
+  finished_at: string | null
+  created_at: string
+  updated_at: string
+}
+
+export interface TicketDetail extends Ticket {
+  ai_result: TicketAiResult | null
+  events: TicketEvent[]
+}
+
 /* API 响应格式 */
 export interface PaginatedResponse<T> {
   list: T[]

@@ -50,7 +50,7 @@ export default function BrandDetail() {
         ...values,
         release_stock_time: values.release_stock_time
           ? dayjs(values.release_stock_time).format('HH:mm:ss')
-          : undefined,
+          : null,
       }
 
       if (isNew) {

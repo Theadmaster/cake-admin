@@ -17,6 +17,7 @@ import WikiList from '@/pages/Wiki/WikiList'
 import WikiDetail from '@/pages/Wiki/WikiDetail'
 import TagList from '@/pages/Tags/TagList'
 import Tasks from '@/pages/Tasks'
+import Tickets from '@/pages/Tickets'
 import Settings from '@/pages/Settings'
 import Login from '@/pages/Login'
 
@@ -100,6 +101,10 @@ const router = createBrowserRouter([
       {
         path: 'tasks',
         element: <Tasks />,
+      },
+      {
+        path: 'tickets',
+        element: <Tickets />,
       },
       {
         path: 'settings',
